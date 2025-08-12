@@ -11,12 +11,10 @@ use Carbon\Carbon;
 
 class PengembalianController extends Controller
 {
-    // Get semua data pengembalian
     public function index()
     {
         $pengembalian = Pengembalian::with(['peminjaman.user', 'peminjaman.buku'])->latest()->get();
         
-        // Tambahkan informasi keterlambatan untuk setiap pengembalian
         $pengembalian = $pengembalian->map(function ($item) {
             $peminjaman = $item->peminjaman;
             $tenggat = Carbon::parse($peminjaman->tenggat);
@@ -40,7 +38,6 @@ class PengembalianController extends Controller
         ]);
     }
 
-    // Detail pengembalian
     public function show($id)
     {
         $pengembalian = Pengembalian::with(['peminjaman.user', 'peminjaman.buku'])->find($id);
@@ -53,7 +50,6 @@ class PengembalianController extends Controller
             ], 404);
         }
 
-        // Tambahkan informasi keterlambatan
         $peminjaman = $pengembalian->peminjaman;
         $tenggat = Carbon::parse($peminjaman->tenggat);
         $tanggalKembali = Carbon::parse($pengembalian->tanggal_pengembalian);
@@ -74,7 +70,6 @@ class PengembalianController extends Controller
         ]);
     }
 
-    // Method khusus untuk mendapatkan peminjaman yang belum dikembalikan
     public function getPeminjamanBelumKembali()
     {
         $peminjamanBelumKembali = Peminjaman::with(['user', 'buku'])
@@ -90,7 +85,6 @@ class PengembalianController extends Controller
         ]);
     }
 
-    // Method khusus untuk mendapatkan peminjaman yang terlambat
     public function getPeminjamanTerlambat()
     {
         $today = Carbon::now()->format('Y-m-d');
@@ -102,7 +96,6 @@ class PengembalianController extends Controller
             ->latest()
             ->get();
 
-        // Tambahkan informasi hari keterlambatan
         $peminjamanTerlambat = $peminjamanTerlambat->map(function ($item) use ($today) {
             $tenggat = Carbon::parse($item->tenggat);
             $todayCarbon = Carbon::parse($today);

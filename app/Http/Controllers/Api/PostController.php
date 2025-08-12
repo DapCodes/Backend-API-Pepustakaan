@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -20,17 +19,17 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::latest()->get();
+
         return response()->json([
             'data' => $posts,
             'message' => 'Fetch all posts',
-            'success' => true
+            'success' => true,
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
@@ -39,14 +38,14 @@ class PostController extends Controller
             'title' => 'required|string|max:255|unique:posts',
             'content' => 'required|string|max:255',
             'status' => 'required',
-            'image' => 'required|image|mimes:png,jpg,jpeg,webp|max:2048'
+            'image' => 'required|image|mimes:png,jpg,jpeg,webp|max:2048',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'data' => [],
                 'message' => $validator->errors(),
-                'success' => false
+                'success' => false,
             ], 400);
         }
 
@@ -73,7 +72,7 @@ class PostController extends Controller
         return response()->json([
             'data' => $post,
             'message' => 'Post created successfully.',
-            'success' => true
+            'success' => true,
         ], 201);
     }
 
@@ -97,30 +96,29 @@ class PostController extends Controller
             'data' => $post,
             'message' => 'Show post detail',
         ], 200);
-    
+
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255|unique:posts,title,' . $id,
+            'title' => 'required|string|max:255|unique:posts,title,'.$id,
             'content' => 'required|string|max:255',
             'status' => 'required',
-            'image' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048'
+            'image' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'data' => [],
                 'message' => $validator->errors(),
-                'success' => false
+                'success' => false,
             ], 400);
         }
 
@@ -140,7 +138,7 @@ class PostController extends Controller
         if ($request->hasFile('image')) {
             if ($post->image && Storage::disk('public')->exists($post->image)) {
                 Storage::disk('public')->delete($post->image);
-                
+
                 $path = $request->file('image')->store('posts', 'public');
                 $post->image = $path;
             }
@@ -151,7 +149,7 @@ class PostController extends Controller
         return response()->json([
             'data' => $post,
             'message' => 'Update data success',
-            'success' => true
+            'success' => true,
         ], 200);
     }
 
@@ -165,7 +163,7 @@ class PostController extends Controller
     {
         $post = Post::find($id);
 
-        if(! $post) {
+        if (! $post) {
             return response()->json(['message' => 'Data not found'], 400);
         }
 
@@ -178,7 +176,7 @@ class PostController extends Controller
         return response()->json([
             'data' => [],
             'message' => 'Post deleted successfully',
-            'success' => true
+            'success' => true,
         ]);
     }
 }

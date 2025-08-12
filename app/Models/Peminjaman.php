@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Peminjaman extends Model
 {
     use HasFactory;
 
     protected $table = 'peminjamen';
+
     protected $fillable = [
         'user_id',
         'buku_id',
@@ -17,7 +18,7 @@ class Peminjaman extends Model
         'tanggal_pinjam',
         'tenggat',
         'tanggal_pengembalian',
-        'status'
+        'status',
     ];
 
     public function user()

@@ -9,17 +9,16 @@ use Validator;
 
 class KategoriController extends Controller
 {
-
     public function index()
     {
         $kategori = kategori::latest()->get();
+
         return response()->json([
             'data' => $kategori,
             'message' => 'Fetch all kategori',
-            'success' => true
+            'success' => true,
         ]);
     }
-
 
     public function store(Request $request)
     {
@@ -31,7 +30,7 @@ class KategoriController extends Controller
             return response()->json([
                 'data' => [],
                 'message' => $validator->errors(),
-                'success' => false
+                'success' => false,
             ], 400);
         }
 
@@ -43,11 +42,10 @@ class KategoriController extends Controller
         return response()->json([
             'data' => $kategori,
             'message' => 'Kategori created successfully.',
-            'success' => true
+            'success' => true,
         ], 201);
     }
 
-   
     public function show($id)
     {
         $kategori = Kategori::find($id);
@@ -64,18 +62,17 @@ class KategoriController extends Controller
         ], 200);
     }
 
-
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'nama_kategori' => 'required|string|max:255|unique:kategoris,nama_kategori,' . $id,
+            'nama_kategori' => 'required|string|max:255|unique:kategoris,nama_kategori,'.$id,
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'data' => [],
                 'message' => $validator->errors(),
-                'success' => false
+                'success' => false,
             ], 400);
         }
 
@@ -87,13 +84,10 @@ class KategoriController extends Controller
         return response()->json([
             'data' => $kategori,
             'message' => 'Kategori edited successfully.',
-            'success' => true
+            'success' => true,
         ], 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
         $kategori = Kategori::find($id);
@@ -103,7 +97,7 @@ class KategoriController extends Controller
         return response()->json([
             'data' => [],
             'message' => 'kategori deleted successfully',
-            'success' => true
+            'success' => true,
         ]);
     }
 }

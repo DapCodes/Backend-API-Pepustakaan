@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -32,8 +33,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('/bukus', \App\Http\Controllers\Api\BukuController::class)
         ->except(['create', 'edit']);
 
-    Route::apiResource('peminjaman',  \App\Http\Controllers\Api\PeminjamanController::class);
-    Route::apiResource('pengembalian',  \App\Http\Controllers\Api\PengembalianController::class);
-    Route::get('peminjaman-belum-kembali', [ \App\Http\Controllers\Api\PengembalianController::class, 'getPeminjamanBelumKembali']);
-    Route::get('peminjaman-terlambat', [ \App\Http\Controllers\Api\PengembalianController::class, 'getPeminjamanTerlambat']);
+    Route::apiResource('peminjaman', \App\Http\Controllers\Api\PeminjamanController::class);
+    Route::apiResource('pengembalian', \App\Http\Controllers\Api\PengembalianController::class);
+    Route::get('peminjaman-belum-kembali', [\App\Http\Controllers\Api\PengembalianController::class, 'getPeminjamanBelumKembali']);
+    Route::get('peminjaman-terlambat', [\App\Http\Controllers\Api\PengembalianController::class, 'getPeminjamanTerlambat']);
 });

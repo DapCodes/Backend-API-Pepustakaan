@@ -2,17 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Pengembalian extends Model
 {
     use HasFactory;
 
     protected $table = 'pengembalians';
+
     protected $fillable = [
         'peminjaman_id',
-        'tanggal_pengembalian'
+        'tanggal_pengembalian',
     ];
 
     public function peminjaman()
