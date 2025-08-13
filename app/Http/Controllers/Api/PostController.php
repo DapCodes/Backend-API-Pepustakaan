@@ -36,8 +36,8 @@ class PostController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255|unique:posts',
-            'content' => 'required|string|max:255',
-            'status' => 'required',
+            'content' => 'required|string',
+            'status' => 'required|integer|in:1,2',
             'image' => 'required|image|mimes:png,jpg,jpeg,webp|max:2048',
         ]);
 
@@ -49,31 +49,33 @@ class PostController extends Controller
             ], 400);
         }
 
-        // $post = Post::create([
-        //     'title' => $request->get('title'),
-        //     'content' => $request->get('content'),
-        //     'status' => $request->get('status'),
-        //     'slug' => Str::slug($request->get('title'))
-        // ]);
+        try {
+            $post = new Post;
+            $post->title = $request->title;
+            $post->slug = Str::slug($request->title, '-');
+            $post->content = $request->content;
+            $post->status = (int) $request->status; // Cast ke integer
+            
+            if ($request->hasFile('image')) {
+                $path = $request->file('image')->store('posts', 'public');
+                $post->image = $path;
+            }
+            
+            $post->save();
 
-        $post = new Post;
-        $post->title = $request->title;
-        $post->slug = Str::slug($request->title, '-');
-        $post->content = $request->content;
-        $post->status = $request->status;
-
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('posts', 'public');
-            $post->image = $path;
+            return response()->json([
+                'data' => $post,
+                'message' => 'Post created successfully.',
+                'success' => true,
+            ], 201); // Ubah status code ke 201 untuk created
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'data' => [],
+                'message' => 'Failed to create post: ' . $e->getMessage(),
+                'success' => false,
+            ], 500);
         }
-
-        $post->save();
-
-        return response()->json([
-            'data' => $post,
-            'message' => 'Post created successfully.',
-            'success' => true,
-        ], 201);
     }
 
     /**

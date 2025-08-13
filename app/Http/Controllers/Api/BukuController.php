@@ -72,7 +72,8 @@ class BukuController extends Controller
 
     public function show($id)
     {
-        $buku = Buku::find($id);
+        $buku = Buku::with('kategori')->find($id);
+        
 
         if (! $buku) {
             return response()->json([
